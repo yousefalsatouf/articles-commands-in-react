@@ -7,14 +7,14 @@ class App extends Component
 {
     state = {
         data: [],
+        newCommands: [],
         error: null,
         isLoading:  false,
-        newCommand: [],
     };
     componentDidMount()
     {
         $.ajax({
-            url: '../public/articles.php',
+            url: 'http://localhost:3000/ALSATOUF-yousef/public_html/articles.php',
             type: 'GET',
             dataType: 'json',
             success: (data)=>{
@@ -31,9 +31,31 @@ class App extends Component
             timeout: 2000
         });
     }
+    handelAdd = (id)=>{
+        const data = this.state.data.slice();
+        const index = data.findIndex((data)=>{
+            return data.id === id;
+        });
+        this.state.newCommands.push(index, 1);
+    };
 
     render() {
-        const { error, isLoaded} = this.state;
+        const {data, newCommands, error, isLoaded} = this.state;
+        const articles = data.map(data => (
+            <tr>
+                <td>{data.marque}</td>
+                <td>{data.nom}</td>
+                <td>{data.prix}</td>
+                <td><button onClick={()=>this.handelAdd(this.state.data.id)}>{data.action}</button></td>
+            </tr>
+        ));
+        const newCommand = newCommands.map(data=>(
+            <tr>
+                <td>{data.marque}</td>
+                <td>{data.nom}</td>
+                <td>{data.prix}</td>
+            </tr>
+        ));
 
         if(error)
         {
@@ -45,8 +67,8 @@ class App extends Component
             {
             return (
                 <div className="App">
-                    <ArticlesTable/>
-                    <CommandsTable/>
+                    <ArticlesTable articlesList={articles}/>
+                    <CommandsTable newCommand={newCommand}/>
                 </div>
             )
         }

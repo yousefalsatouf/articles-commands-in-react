@@ -21,7 +21,7 @@ class CommandsTable extends Component
                     <h1>{title}</h1>
                     <table>
                         <thead>{commandTitle}</thead>
-                        <tbody>{this.props.addNew}</tbody>
+                        <tbody>{this.props.newCommand}</tbody>
                     </table>
                 </div>;
     }
