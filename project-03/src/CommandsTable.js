@@ -8,6 +8,7 @@ class CommandsTable extends Component
             "Nom",
             "Prix",
             "Quantité",
+            "Compteur",
             "Sous-total"
         ],
     };
@@ -21,7 +22,8 @@ class CommandsTable extends Component
                     <h1>{title}</h1>
                     <table>
                         <thead>{commandTitle}</thead>
-                        <tbody>{this.props.newCommand}</tbody>
+                        <tbody>{this.props.newCommandsList}</tbody>
+                        <tfoot>{this.props.totalPrices}</tfoot>
                     </table>
                 </div>;
     }
