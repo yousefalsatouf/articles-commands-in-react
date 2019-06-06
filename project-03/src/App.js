@@ -11,6 +11,7 @@ class App extends Component
         error: null,
         isLoading:  false,
         counter: 0,
+        subTotal: [],
         total: 0
     };
     componentDidMount()
@@ -56,24 +57,45 @@ class App extends Component
             this.setState(commands);
     };
 
-    handelPlus = ()=>{
+    handelPlus = (id)=>{
         this.setState({counter: this.state.counter + 1});
-        const count = this.state.counter;
-        this.handelPrices(count)
+        const amount = this.state.counter;
+        for (let i = 0; i < this.state.newCommands.length; i++)
+        {
+            if (this.state.newCommands[i].id === id)
+            {
+                const price = this.state.newCommands[i].prix;
+                this.handelPrices(price, amount);
+            }
+        }
     };
 
-    handelMinus = ()=>{
-        this.setState({counter: this.state.counter - 1});
-        const count = this.state.counter;
-        this.handelPrices(count)
+    handelMinus = (id)=>{
+        this.setState({counter: parseInt(this.state.counter)  - 1});
+        const amount = this.state.counter;
+        for (let i = 0; i < this.state.newCommands.length; i++)
+        {
+            if (this.state.newCommands[i].id === id)
+            {
+                const price = this.state.newCommands[i].prix;
+                this.handelPrices(price, amount);
+            }
+        }
     };
 
-    handelPrices = (newAmount)=>{
-        console.log(newAmount);
+    handelPrices = (price, newAmount)=>{
+        const result = parseInt(price)*newAmount;
+        this.setState({subTotal: this.state.subTotal + parseInt(result)});
+        const subTotal = this.state.subTotal;
+        for (let counter in subTotal)
+        {
+            const total = this.state.total;
+            this.setState({total: counter + total});
+        }
     };
 
     render() {
-        const {data, newCommands, error, isLoaded, counter, total} = this.state;
+        const {data, newCommands, error, isLoaded, counter,subTotal, total} = this.state;
         const articles = data.map(data => (
             <tr>
                 <td>{data.marque}</td>
@@ -87,12 +109,12 @@ class App extends Component
                 <td>{newCommand.marque}</td>
                 <td>{newCommand.nom}</td>
                 <td>{newCommand.prix}</td>
-                <td className="amount">{counter}</td>
-                <td className="btn">
-                    <button className="plus" onClick={this.handelPlus}>+</button>
-                    <button className="minus" onClick={this.handelMinus}>-</button>
+                <td>{counter}</td>
+                <td>
+                    <button onClick={()=>this.handelPlus(newCommand.id)}>+</button>
+                    <button onClick={()=>this.handelMinus(newCommand.id)}>-</button>
                 </td>
-                <td className="sub-total">0</td>
+                <td>{subTotal}</td>
             </tr>
         ));
         const totalForm =   <tr>
